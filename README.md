@@ -30,4 +30,4 @@ docker run -v [PATH_TO_BAG_FOLDER]:/home  -it --rm --net host -e ROS_MASTER_URI=
 rosbag record /MY_ROBOT_NAME/right_wheel_encoder_node/tick /MY_ROBOT_NAME/left_wheel_encoder_node/tick /MY_ROBOT_NAME/wheels_driver_node/wheels_cmd /MY_ROBOT_NAME/my_left_travel_dist /MY_ROBOT_NAME/my_right_travel_dist
 ```
 
-Now you can use the virtual joystick to control the duckie bot in the simulation world.
+Now you can use the keyboard to control the duckitbot and the rosbad is recording the topic that you are subscribing.
