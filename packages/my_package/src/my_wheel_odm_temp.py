@@ -60,35 +60,13 @@ class MyOdometryNode(DTROS):
         # self.bag = bag
 
 
-    # def cb_encoder_data(self, wheel, msg):
-    #     """ Update encoder distance information from ticks.
-    #     """
-
     def cb_executed_cmds(self, msg):
         """ Use the executed commands to determine the direction of travel of each wheel.
         """
         print("In wheels_cmd: recieved: ",msg.vel_left, msg.vel_right)
         self.vel_left = msg.vel_left
         self.vel_right = msg.vel_right
-        # if msg.vel_left <=0:
-        #     self.Nticks_left_delta *=-1
-        # if msg.vel_right <= 0 :
-        #     self.Nticks_right_delta *=-1
 
-        # calculate distance
-        # self.left_travel_dist_accum += self.Nticks_left_delta * 2 * self._radius * math.pi / self.Ntotal
-        # self.right_travel_dist_accum += self.Nticks_right_delta * 2 * self._radius * math.pi / self.Ntotal
-        # print("traveled dist: left/right:", self.left_travel_dist_accum, self.right_travel_dist_accum)
-        # self.pub_integrated_distance_left.publish(self.left_travel_dist_accum)
-        # self.pub_integrated_distance_right.publish(self.right_travel_dist_accum)
-
-        # if self._radius_cali and (self.left_travel_dist_accum != 0) \
-        #         and (self.left_travel_dist_accum != 0) \
-        #         and (int(msg.vel_left) == 0) and (int(msg.vel_right) == 0):
-        #     _radius_cali_left = self.Ntotal * self.left_travel_dist_accum /2  / math.pi /self.Nticks_left_accum
-        #     _radius_cali_right = self.Ntotal * self.right_travel_dist_accum /2  / math.pi /self.Nticks_right_accum
-        #     print("current accumulated travel dist:", self.left_travel_dist_accum, self.right_travel_dist_accum)
-        #     print("current radius:", _radius_cali_left, _radius_cali_right)
 
     def left_encoder_data(self,data):
         rospy.loginfo("In left_encoder_data: recieved: " + str(data.data))
@@ -107,11 +85,11 @@ class MyOdometryNode(DTROS):
             print("traveled dist: left:", self.left_travel_dist_accum)
             self.pub_integrated_distance_left.publish(self.left_travel_dist_accum)
 
-            _radius_cali_left = self.Ntotal * self.left_travel_dist_accum / (2 * math.pi * self.Nticks_left_accum)
-            print("current radius left:", _radius_cali_left)
+            if self.Nticks_left_accum !=0:
+                _radius_cali_left = self.Ntotal * self.left_travel_dist_accum / (2 * math.pi * self.Nticks_left_accum)
+                print("current radius left:", _radius_cali_left)
 
         self.iter_left +=1
-
 
 
     def right_encoder_data(self,data):
@@ -130,9 +108,9 @@ class MyOdometryNode(DTROS):
             self.right_travel_dist_accum = self.Nticks_right_accum * 2 * self._radius * math.pi / self.Ntotal
             print("traveled dist: right:", self.right_travel_dist_accum)
             self.pub_integrated_distance_right.publish(self.right_travel_dist_accum)
-
-            _radius_cali_right = self.Ntotal * self.right_travel_dist_accum / (2 * math.pi * self.Nticks_right_accum)
-            print("current radius right:", _radius_cali_right)
+            if self.Nticks_right_accum !=0:
+                _radius_cali_right = self.Ntotal * self.right_travel_dist_accum / (2 * math.pi * self.Nticks_right_accum)
+                print("current radius right:", _radius_cali_right)
 
         self.iter_right +=1
 
@@ -140,12 +118,6 @@ class MyOdometryNode(DTROS):
 
 
 if __name__ == '__main__':
-    # def write2bag(bag_file, write_msg, type):
-    #         bag_file.write( '/jcdgo/camera_node/image/compressed', write_msg)
-    # create ros bag
-    # bag = rosbag.Bag('/code/catkin_ws/src/rh4-exe27/mounted_v/amod20-rh5-ex-record-distance-xiaoao-song.bag', 'w')
-    # node = MyOdometryNode(node_name='my_odometry_node', bag=bag)
-
     # _radius_flag  = False
     _radius_flag  = True
     node = MyOdometryNode(node_name='my_odometry_node', _radius_flag=_radius_flag)
