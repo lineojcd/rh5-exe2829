@@ -1,0 +1,11 @@
+<launch>
+
+  <group ns="$(arg veh)">  
+    <node pkg="my_package" type="my_wheel_odm_temp.py" name="my_wheel_odm_node" output="screen"/>
+   </group>
+
+</launch>
+
+
+
+
